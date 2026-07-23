@@ -10,7 +10,6 @@ import {
   Moon,
   Github,
   Linkedin,
-  Instagram,
   Mail,
   ArrowUpRight,
   Menu,
@@ -18,6 +17,10 @@ import {
   Terminal,
   Download,
   RotateCcw,
+  Award,
+  ShieldCheck,
+  Layers,
+  ArrowLeft,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -54,6 +57,92 @@ const getFilterCSS = (id: FilterId): string => {
 const TYPING_QUOTE =
   "I am a fourth year information technology student developer designing minimal and clean user interfaces with typescript and tailwind css.";
 
+const MS_LEARN_BADGES = [
+  { name: "Describe cloud service types", date: "7/21/2026", assessed: true },
+  { name: "Describe the benefits of using cloud services", date: "7/21/2026" },
+  { name: "Describe cloud computing", date: "7/21/2026", assessed: true },
+  { name: "Get started with Copilot in Power BI", date: "7/21/2026", assessed: true },
+  { name: "Introduction to end-to-end analytics using Microsoft Fabric", date: "7/21/2026", assessed: true },
+  { name: "Get started building with Power BI", date: "5/25/2026" },
+  { name: "Discover data analysis", date: "5/25/2026" },
+];
+
+const TECH_STACK_CATEGORIES = [
+  {
+    category: "FRONTEND",
+    items: [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Vue.js",
+      "Tailwind CSS",
+      "SCSS",
+      "Styled Components",
+      "Vite",
+      "Webpack",
+      "ESLint",
+      "Prettier",
+    ],
+  },
+  {
+    category: "BACKEND",
+    items: [
+      "Node.js",
+      "Python",
+      "Java",
+      "PHP",
+      "Express.js",
+      "NestJS",
+      "FastAPI",
+      "Spring Boot",
+      "Laravel",
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "DynamoDB",
+      "OAuth",
+      "JWT",
+      "LDAP",
+      "REST",
+      "GraphQL",
+      "gRPC",
+      "AWS Lambda",
+    ],
+  },
+  {
+    category: "DEVOPS & CLOUD",
+    items: [
+      "AWS",
+      "GCP",
+      "Azure",
+      "GitHub Actions",
+      "Jenkins",
+      "GitLab CI",
+      "Terraform",
+      "AWS CloudFormation",
+      "Docker",
+      "Kubernetes",
+      "Prometheus",
+      "Grafana",
+      "Datadog",
+    ],
+  },
+  {
+    category: "TOOLS & AI",
+    items: [
+      "PyTorch",
+      "Claude Code",
+      "Git",
+      "VS Code",
+      "Postman",
+      "Figma",
+      "Linux",
+      "Vercel",
+    ],
+  },
+];
+
 
 
 /* ------------------------------------------------------------------ */
@@ -64,6 +153,10 @@ export default function Home() {
   /* ---- UI & Theme ---- */
   const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeView, setActiveView] = useState<"overview" | "stack">("overview");
+  const [activeNav, setActiveNav] = useState<
+    "projects" | "experience" | "stack" | "certifications"
+  >("projects");
 
 
   /* ---- Photobooth ---- */
@@ -91,6 +184,7 @@ export default function Home() {
 
 
   /* ---- Scroll Refs ---- */
+  const heroRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const experienceRef = useRef<HTMLDivElement>(null);
   const certificationsRef = useRef<HTMLDivElement>(null);
@@ -100,6 +194,29 @@ export default function Home() {
   /* ================================================================ */
 
   /* Theme loader */
+  useEffect(() => {
+    if (activeView !== "overview") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === projectsRef.current) setActiveNav("projects");
+            if (entry.target === experienceRef.current) setActiveNav("experience");
+            if (entry.target === certificationsRef.current) setActiveNav("certifications");
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (projectsRef.current) observer.observe(projectsRef.current);
+    if (experienceRef.current) observer.observe(experienceRef.current);
+    if (certificationsRef.current) observer.observe(certificationsRef.current);
+
+    return () => observer.disconnect();
+  }, [activeView]);
+
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
     const prefersDark =
@@ -257,9 +374,25 @@ export default function Home() {
     }
   };
 
-  const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToHero = () => {
+    setActiveView("overview");
+    setActiveNav("projects");
     setMobileMenuOpen(false);
+    setTimeout(() => {
+      heroRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
+
+  const navigateToSection = (
+    section: "projects" | "experience" | "certifications",
+    ref: React.RefObject<HTMLDivElement | null>
+  ) => {
+    setActiveView("overview");
+    setActiveNav(section);
+    setMobileMenuOpen(false);
+    setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   /* ---- Typing ---- */
@@ -349,9 +482,12 @@ export default function Home() {
     <div className="relative md:h-screen flex flex-col md:flex-row bg-background text-foreground bg-dotted-grid font-mono md:overflow-hidden selection:bg-neutral-200 dark:selection:bg-neutral-800">
       {/* ==================== Mobile Header ==================== */}
       <header className="md:hidden flex items-center justify-between border-b border-border-custom bg-background/90 backdrop-blur px-5 py-3 z-40 sticky top-0">
-        <span className="font-pixel text-[8px] tracking-tight">
+        <button
+          onClick={scrollToHero}
+          className="font-pixel text-[10px] font-bold tracking-tight text-left hover:text-neutral-500 transition-colors cursor-pointer"
+        >
           Leovi Garcia
-        </span>
+        </button>
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
@@ -388,22 +524,40 @@ export default function Home() {
             className="md:hidden fixed top-[57px] left-0 right-0 bg-background border-b border-border-custom px-5 py-4 flex flex-col gap-3 z-30 shadow-md"
           >
             <button
-              onClick={() => scrollTo(projectsRef)}
-              className="text-left text-xs py-1.5 hover:pl-2 transition-all"
+              onClick={() => navigateToSection("projects", projectsRef)}
+              className={`text-left text-xs py-1.5 hover:pl-2 transition-all ${
+                activeNav === "projects" ? "font-bold text-foreground" : ""
+              }`}
             >
-              01. Projects
+              {activeNav === "projects" ? "→ 01. Projects" : "01. Projects"}
             </button>
             <button
-              onClick={() => scrollTo(experienceRef)}
-              className="text-left text-xs py-1.5 hover:pl-2 transition-all"
+              onClick={() => navigateToSection("experience", experienceRef)}
+              className={`text-left text-xs py-1.5 hover:pl-2 transition-all ${
+                activeNav === "experience" ? "font-bold text-foreground" : ""
+              }`}
             >
-              02. Experience
+              {activeNav === "experience" ? "→ 02. Experience" : "02. Experience"}
             </button>
             <button
-              onClick={() => scrollTo(certificationsRef)}
-              className="text-left text-xs py-1.5 hover:pl-2 transition-all"
+              onClick={() => {
+                setActiveView("stack");
+                setActiveNav("stack");
+                setMobileMenuOpen(false);
+              }}
+              className={`text-left text-xs py-1.5 hover:pl-2 transition-all ${
+                activeNav === "stack" ? "font-bold text-foreground" : ""
+              }`}
             >
-              03. Certifications
+              {activeNav === "stack" ? "→ 03. Stack" : "03. Stack"}
+            </button>
+            <button
+              onClick={() => navigateToSection("certifications", certificationsRef)}
+              className={`text-left text-xs py-1.5 hover:pl-2 transition-all ${
+                activeNav === "certifications" ? "font-bold text-foreground" : ""
+              }`}
+            >
+              {activeNav === "certifications" ? "→ 04. Certifications" : "04. Certifications"}
             </button>
             <div className="border-t border-border-custom pt-3 flex flex-col gap-2">
               <button
@@ -434,42 +588,73 @@ export default function Home() {
         {/* Top Section */}
         <div className="flex flex-col gap-6">
           {/* Identity */}
-          <div>
-            <h1 className="font-pixel text-[9px] font-bold leading-relaxed tracking-tight">
+          <button
+            onClick={scrollToHero}
+            className="flex flex-col text-left group cursor-pointer focus:outline-none"
+          >
+            <h1 className="font-pixel text-[13px] md:text-[15px] font-bold leading-relaxed tracking-tight group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
               Leovi Garcia
             </h1>
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1">
+            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">
               student developer
             </p>
-          </div>
+          </button>
 
           {/* Navigation */}
           <nav className="flex flex-col gap-2.5 text-[11px]">
             <button
-              onClick={() => scrollTo(projectsRef)}
-              className="group flex items-center justify-between text-neutral-500 hover:text-foreground transition-all text-left"
+              onClick={() => navigateToSection("projects", projectsRef)}
+              className={`group flex items-center justify-between transition-all text-left ${
+                activeNav === "projects"
+                  ? "text-foreground font-bold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
             >
-              <span>Projects</span>
+              <span>{activeNav === "projects" ? "→ Projects" : "Projects"}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px]">
                 01
               </span>
             </button>
             <button
-              onClick={() => scrollTo(experienceRef)}
-              className="group flex items-center justify-between text-neutral-500 hover:text-foreground transition-all text-left"
+              onClick={() => navigateToSection("experience", experienceRef)}
+              className={`group flex items-center justify-between transition-all text-left ${
+                activeNav === "experience"
+                  ? "text-foreground font-bold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
             >
-              <span>Experience</span>
+              <span>{activeNav === "experience" ? "→ Experience" : "Experience"}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px]">
                 02
               </span>
             </button>
             <button
-              onClick={() => scrollTo(certificationsRef)}
-              className="group flex items-center justify-between text-neutral-500 hover:text-foreground transition-all text-left"
+              onClick={() => {
+                setActiveView("stack");
+                setActiveNav("stack");
+              }}
+              className={`group flex items-center justify-between transition-all text-left ${
+                activeNav === "stack"
+                  ? "text-foreground font-bold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
             >
-              <span>Certifications</span>
+              <span>{activeNav === "stack" ? "→ Stack" : "Stack"}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px]">
                 03
+              </span>
+            </button>
+            <button
+              onClick={() => navigateToSection("certifications", certificationsRef)}
+              className={`group flex items-center justify-between transition-all text-left ${
+                activeNav === "certifications"
+                  ? "text-foreground font-bold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
+            >
+              <span>{activeNav === "certifications" ? "→ Certifications" : "Certifications"}</span>
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px]">
+                04
               </span>
             </button>
           </nav>
@@ -534,257 +719,332 @@ export default function Home() {
       {/* ==================== Main Content ==================== */}
       <main className="flex-1 flex flex-col items-center py-8 md:py-16 px-5 md:px-14 overflow-y-auto">
         <div className="w-full max-w-4xl flex flex-col gap-16">
-          {/* ---- Profile Header ---- */}
-          <section className="flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start pt-2 md:pt-8">
-            {/* Monogram Sign */}
-            <div className="relative w-[240px] h-[300px] md:w-[280px] md:h-[340px] border border-border-custom p-2.5 bg-background shrink-0 shadow-sm transition hover:shadow-md duration-300 group">
-              <div className="relative w-full h-full bg-neutral-100 dark:bg-neutral-900 border border-border-custom overflow-hidden flex flex-col items-center justify-center gap-4">
-                {/* Initials */}
-                <span className="font-pixel text-[48px] md:text-[56px] text-neutral-800 dark:text-neutral-100 tracking-tighter select-none leading-none group-hover:scale-105 transition-transform duration-300">
-                  LG
-                </span>
-                {/* Decorative line */}
-                <div className="w-12 h-[1px] bg-neutral-300 dark:bg-neutral-700" />
-                {/* Subtitle */}
-                <span className="text-[7px] uppercase tracking-[0.35em] text-neutral-400 dark:text-neutral-500">
-                  est. 2023
-                </span>
-              </div>
-            </div>
-
-            {/* Bio */}
-            <div className="flex flex-col gap-5 md:pt-2 text-center md:text-left">
+          {activeView === "stack" ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-col gap-10 py-2"
+            >
+              {/* Back Button */}
               <div>
-                <span className="text-[8px] uppercase tracking-[0.2em] text-neutral-400 block mb-1.5">
-                  Portfolio
-                </span>
-                <h2 className="font-pixel text-[14px] md:text-[18px] leading-relaxed tracking-tight text-neutral-900 dark:text-neutral-50">
-                  Leovi Garcia
-                </h2>
+                <button
+                  onClick={() => setActiveView("overview")}
+                  className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-foreground transition group cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                  <span>Overview</span>
+                </button>
               </div>
 
-              <div className="flex flex-col gap-3 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed md:max-w-xl">
-                <p>
-                  I am a{" "}
-                  <strong className="text-foreground font-bold">
-                    4th-year Information Technology student
-                  </strong>{" "}
-                  building responsive, minimalist web environments and
-                  offline-first mobile sync platforms.
-                </p>
-                <p>
-                  Right now, I am focusing on building lightweight, reliable
-                  architectures that connect complex background
-                  synchronizations to clean UI structures. I like turning layout
-                  designs into functional code.
+              {/* Title & Description */}
+              <div className="flex flex-col gap-3">
+                <h1 className="font-pixel text-xl md:text-3xl text-neutral-900 dark:text-neutral-50 tracking-tight">
+                  tech stack
+                </h1>
+                <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 max-w-2xl leading-relaxed">
+                  The tools, frameworks, and platforms I reach for — across the front end, back end, infrastructure, and AI.
                 </p>
               </div>
 
-              {/* Social Links */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-1.5 text-[10px] mt-1 text-neutral-500">
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-foreground transition"
-                >
-                  <Github className="w-3 h-3" /> github{" "}
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-foreground transition"
-                >
-                  <Linkedin className="w-3 h-3" /> linkedin{" "}
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-foreground transition"
-                >
-                  <Instagram className="w-3 h-3" /> instagram{" "}
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </a>
-                <a
-                  href="mailto:leovigarcia07@gmail.com"
-                  className="flex items-center gap-1 hover:text-foreground transition"
-                >
-                  <Mail className="w-3 h-3" /> email{" "}
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </a>
+              {/* Categorized Tech Badges */}
+              <div className="flex flex-col gap-10">
+                {TECH_STACK_CATEGORIES.map((cat) => (
+                  <div key={cat.category} className="flex flex-col gap-3.5">
+                    <span className="text-[10px] font-bold tracking-[0.2em] text-neutral-400 uppercase">
+                      {cat.category}
+                    </span>
+                    <div className="flex flex-wrap gap-2.5">
+                      {cat.items.map((item) => (
+                        <div
+                          key={item}
+                          className="px-3.5 py-1.5 border border-border-custom bg-background hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded text-xs font-mono text-neutral-700 dark:text-neutral-300 border-border-custom hover:border-neutral-400 dark:hover:border-neutral-500 transition-all duration-150 cursor-default select-none shadow-2xs"
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </section>
-
-          {/* ---- Stats ---- */}
-          <section className="grid grid-cols-2 md:grid-cols-3 border-y border-border-custom divide-x divide-y divide-border-custom md:divide-y-0 py-0 bg-background/30">
-            <div className="p-5 text-center md:text-left flex flex-col gap-1">
-              <span className="font-pixel text-[10px] md:text-[12px] text-neutral-800 dark:text-neutral-100">
-                4th Year
-              </span>
-              <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">
-                STUDENT STATUS
-              </span>
-            </div>
-            <div className="p-5 text-center md:text-left flex flex-col gap-1">
-              <span className="font-pixel text-[10px] md:text-[12px] text-neutral-800 dark:text-neutral-100">
-                15+
-              </span>
-              <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">
-                PROJECTS BUILT
-              </span>
-            </div>
-
-            <div className="p-5 text-center md:text-left flex flex-col gap-1">
-              <span className="font-pixel text-[10px] md:text-[12px] text-neutral-800 dark:text-neutral-100">
-                500+
-              </span>
-              <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">
-                GIT COMMITS
-              </span>
-            </div>
-          </section>
-
-          {/* ---- Stack ---- */}
-          <section className="flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
-              <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
-                STACK
-              </span>
-              <button
-                onClick={() =>
-                  alert(
-                    "Full Tech Stack: TypeScript, React, Next.js, Node.js, Python, Laravel, PostgreSQL, AWS, Docker, Kubernetes, PyTorch, Claude Code"
-                  )
-                }
-                className="text-[9px] text-neutral-400 hover:text-foreground transition flex items-center gap-1 cursor-pointer"
-              >
-                VIEW ALL <ArrowUpRight className="w-2.5 h-2.5" />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2 text-[10px]">
-              {[
-                "TypeScript",
-                "React",
-                "Next.js",
-                "Node.js",
-                "Python",
-                "Laravel",
-                "PostgreSQL",
-                "AWS",
-                "Docker",
-                "Kubernetes",
-                "PyTorch",
-                "Claude Code",
-              ].map((tech) => (
-                <div
-                  key={tech}
-                  className="px-2.5 py-1 border border-border-custom bg-background rounded text-neutral-600 dark:text-neutral-300 hover:border-neutral-400 hover:text-foreground transition duration-200"
-                >
-                  {tech}
+            </motion.div>
+          ) : (
+            <>
+              {/* ---- Profile Header ---- */}
+              <section ref={heroRef} className="flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start pt-2 md:pt-8">
+                {/* Pixel Logo Sign */}
+                <div className="relative w-[240px] h-[300px] md:w-[280px] md:h-[340px] border border-border-custom p-2.5 bg-background shrink-0 shadow-sm transition hover:shadow-md duration-300 group">
+                  <div className="relative w-full h-full bg-neutral-100 dark:bg-neutral-900 border border-border-custom overflow-hidden flex flex-col items-center justify-center gap-5">
+                    {/* Pixel Art Logo SVG */}
+                    <div className="group-hover:scale-105 transition-transform duration-300 select-none">
+                      <svg width="80" height="80" viewBox="0 0 16 16" className="render-pixel" shapeRendering="crispEdges">
+                        {/* L shape */}
+                        <rect x="1" y="1" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="1" y="3" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="1" y="5" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="1" y="7" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="1" y="9" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="3" y="9" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="5" y="9" width="2" height="2" className="fill-neutral-700 dark:fill-neutral-200" />
+                        {/* G shape */}
+                        <rect x="9" y="1" width="2" height="2" className="fill-neutral-700 dark:fill-neutral-200" />
+                        <rect x="11" y="1" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="13" y="1" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="7" y="3" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="7" y="5" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="7" y="7" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="7" y="9" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="9" y="9" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="11" y="9" width="2" height="2" className="fill-neutral-700 dark:fill-neutral-200" />
+                        <rect x="13" y="9" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="13" y="7" width="2" height="2" className="fill-neutral-800 dark:fill-neutral-100" />
+                        <rect x="11" y="7" width="2" height="2" className="fill-neutral-700 dark:fill-neutral-200" />
+                        {/* Decorative pixel corners */}
+                        <rect x="0" y="0" width="1" height="1" className="fill-neutral-300 dark:fill-neutral-700" />
+                        <rect x="15" y="0" width="1" height="1" className="fill-neutral-300 dark:fill-neutral-700" />
+                        <rect x="0" y="11" width="1" height="1" className="fill-neutral-300 dark:fill-neutral-700" />
+                        <rect x="15" y="11" width="1" height="1" className="fill-neutral-300 dark:fill-neutral-700" />
+                      </svg>
+                    </div>
+                    {/* Decorative line */}
+                    <div className="w-12 h-[2px] bg-neutral-300 dark:bg-neutral-700" style={{ imageRendering: 'pixelated' }} />
+                    {/* Subtitle */}
+                    <span className="text-[7px] uppercase tracking-[0.35em] text-neutral-400 dark:text-neutral-500">
+                      est. 2023
+                    </span>
+                  </div>
                 </div>
-              ))}
-              <div
-                onClick={() =>
-                  alert("And many more technologies and academic tools!")
-                }
-                className="px-2.5 py-1 border border-dashed border-border-custom bg-background/50 rounded text-neutral-400 hover:border-neutral-400 hover:text-foreground transition duration-200 cursor-pointer"
-              >
-                + more
-              </div>
-            </div>
-          </section>
 
-          {/* ---- 01 — Projects ---- */}
-          <section ref={projectsRef} className="scroll-mt-20 flex flex-col gap-6">
-            <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
-              <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
-                01 — Projects
-              </span>
-            </div>
+                {/* Bio */}
+                <div className="flex flex-col gap-5 md:pt-2 text-center md:text-left">
+                  <div>
+                    <span className="text-[8px] uppercase tracking-[0.2em] text-neutral-400 block mb-1.5">
+                      Portfolio
+                    </span>
+                    <h2 className="font-pixel text-[14px] md:text-[18px] leading-relaxed tracking-tight text-neutral-900 dark:text-neutral-50">
+                      Leovi Garcia
+                    </h2>
+                  </div>
 
-            {/* Coming Soon */}
-            <div className="w-full border border-dashed border-border-custom rounded-xl flex flex-col items-center justify-center py-16 px-6 gap-4 bg-background/30">
-              <div className="w-12 h-12 rounded-lg border border-border-custom flex items-center justify-center bg-neutral-50 dark:bg-neutral-900">
-                <Terminal className="w-5 h-5 text-neutral-400" />
-              </div>
-              <div className="flex flex-col items-center gap-1.5 text-center">
-                <span className="font-pixel text-[11px] text-neutral-700 dark:text-neutral-200">
-                  Coming Soon
-                </span>
-                <span className="text-[10px] text-neutral-400 max-w-xs leading-relaxed">
-                  Projects are currently being built. Check back soon for updates.
-                </span>
-              </div>
-            </div>
-          </section>
+                  <div className="flex flex-col gap-3 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed md:max-w-xl">
+                    <p>
+                      I am a{" "}
+                      <strong className="text-foreground font-bold">
+                        4th-year Information Technology student
+                      </strong>{" "}
+                      building responsive, minimalist web environments and
+                      offline-first mobile sync platforms.
+                    </p>
+                    <p>
+                      Right now, I am focusing on building lightweight, reliable
+                      architectures that connect complex background
+                      synchronizations to clean UI structures. I like turning layout
+                      designs into functional code.
+                    </p>
+                  </div>
 
-          {/* ---- 02 — Experience & Education ---- */}
-          <section
-            ref={experienceRef}
-            className="scroll-mt-20 flex flex-col gap-6"
-          >
-            <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
-              <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
-                02 — Experience & Education
-              </span>
-              <span className="text-[9px] text-neutral-400">MY PATHWAY</span>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              {/* Timeline 1 */}
-              <div className="flex flex-col md:flex-row md:gap-6 border-l border-border-custom pl-5 relative">
-                <span className="absolute left-[-4px] top-1 w-[7px] h-[7px] rounded-full bg-neutral-300 dark:bg-neutral-700 border-2 border-background" />
-                <span className="text-[10px] text-neutral-400 md:w-28 shrink-0 pt-0.5">
-                  2023 — Present
-                </span>
-                <div className="flex flex-col gap-1 mt-1 md:mt-0">
-                  <h4 className="font-bold text-xs text-neutral-800 dark:text-neutral-100">
-                    BS Information Technology
-                  </h4>
-                  <p className="text-[10px] text-neutral-500">
-                    State University / 4th Year College Student
-                  </p>
-                  <p className="text-[11px] text-neutral-600 dark:text-neutral-400 mt-1.5 leading-relaxed">
-                    Focusing on Software Engineering principles, database
-                    structures, and dynamic web application routing. Project lead
-                    on various academic system designs.
-                  </p>
+                  {/* Social Links */}
+                  <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-1.5 text-[10px] mt-1 text-neutral-500">
+                    <a
+                      href="https://github.com/LeoDiD"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-foreground transition"
+                    >
+                      <Github className="w-3 h-3" /> github{" "}
+                      <ArrowUpRight className="w-2.5 h-2.5" />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/leovi-casipit-garcia-963b90329/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-foreground transition"
+                    >
+                      <Linkedin className="w-3 h-3" /> linkedin{" "}
+                      <ArrowUpRight className="w-2.5 h-2.5" />
+                    </a>
+                    <a
+                      href="mailto:leovigarcia07@gmail.com"
+                      className="flex items-center gap-1 hover:text-foreground transition"
+                    >
+                      <Mail className="w-3 h-3" /> email{" "}
+                      <ArrowUpRight className="w-2.5 h-2.5" />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </section>
+              </section>
 
-          {/* ---- 03 — Certifications ---- */}
-          <section
-            ref={certificationsRef}
-            className="scroll-mt-20 flex flex-col gap-6"
-          >
-            <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
-              <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
-                03 — Certifications
-              </span>
-            </div>
+              {/* ---- Stats ---- */}
+              <section className="grid grid-cols-2 border-y border-border-custom divide-x divide-border-custom py-0 bg-background/30">
+                <div className="p-5 text-center flex flex-col gap-1">
+                  <span className="font-pixel text-[10px] md:text-[12px] text-neutral-800 dark:text-neutral-100">
+                    4th Year
+                  </span>
+                  <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">
+                    STUDENT STATUS
+                  </span>
+                </div>
+                <div className="p-5 text-center flex flex-col gap-1">
+                  <span className="font-pixel text-[10px] md:text-[12px] text-neutral-800 dark:text-neutral-100">
+                    15+
+                  </span>
+                  <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-400">
+                    PROJECTS BUILT
+                  </span>
+                </div>
+              </section>
 
-            {/* Coming Soon */}
-            <div className="w-full border border-dashed border-border-custom rounded-xl flex flex-col items-center justify-center py-16 px-6 gap-4 bg-background/30">
-              <div className="w-12 h-12 rounded-lg border border-border-custom flex items-center justify-center bg-neutral-50 dark:bg-neutral-900">
-                <Terminal className="w-5 h-5 text-neutral-400" />
-              </div>
-              <div className="flex flex-col items-center gap-1.5 text-center">
-                <span className="font-pixel text-[11px] text-neutral-700 dark:text-neutral-200">
-                  Coming Soon
-                </span>
-                <span className="text-[10px] text-neutral-400 max-w-xs leading-relaxed">
-                  Certifications will be listed here once verified.
-                </span>
-              </div>
-            </div>
-          </section>
+              {/* ---- Stack ---- */}
+              <section className="flex flex-col gap-4">
+                <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
+                  <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
+                    STACK
+                  </span>
+                  <button
+                    onClick={() => {
+                      setActiveView("stack");
+                      setActiveNav("stack");
+                    }}
+                    className="text-[9px] text-neutral-400 hover:text-foreground transition flex items-center gap-1 cursor-pointer"
+                  >
+                    VIEW ALL <ArrowUpRight className="w-2.5 h-2.5" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2 text-[10px]">
+                  {[
+                    "TypeScript",
+                    "React",
+                    "Next.js",
+                    "Node.js",
+                    "Python",
+                    "Laravel",
+                    "PostgreSQL",
+                    "AWS",
+                    "Docker",
+                    "Kubernetes",
+                    "PyTorch",
+                    "Claude Code",
+                  ].map((tech) => (
+                    <div
+                      key={tech}
+                      className="px-2.5 py-1 border border-border-custom bg-background rounded text-neutral-600 dark:text-neutral-300 hover:border-neutral-400 hover:text-foreground transition duration-200"
+                    >
+                      {tech}
+                    </div>
+                  ))}
+                  <div
+                    onClick={() => {
+                      setActiveView("stack");
+                      setActiveNav("stack");
+                    }}
+                    className="px-2.5 py-1 border border-dashed border-border-custom bg-background/50 rounded text-neutral-400 hover:border-neutral-400 hover:text-foreground transition duration-200 cursor-pointer"
+                  >
+                    + more
+                  </div>
+                </div>
+              </section>
+
+              {/* ---- 01 — Projects ---- */}
+              <section ref={projectsRef} className="scroll-mt-20 flex flex-col gap-6">
+                <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
+                  <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
+                    01 — Projects
+                  </span>
+                </div>
+
+                {/* Coming Soon */}
+                <div className="w-full border border-dashed border-border-custom rounded-xl flex flex-col items-center justify-center py-16 px-6 gap-4 bg-background/30">
+                  <div className="w-12 h-12 rounded-lg border border-border-custom flex items-center justify-center bg-neutral-50 dark:bg-neutral-900">
+                    <Terminal className="w-5 h-5 text-neutral-400" />
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 text-center">
+                    <span className="font-pixel text-[11px] text-neutral-700 dark:text-neutral-200">
+                      Coming Soon
+                    </span>
+                    <span className="text-[10px] text-neutral-400 max-w-xs leading-relaxed">
+                      Projects are currently being built. Check back soon for updates.
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              {/* ---- 02 — Experience & Education ---- */}
+              <section
+                ref={experienceRef}
+                className="scroll-mt-20 flex flex-col gap-6"
+              >
+                <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
+                  <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
+                    02 — Experience & Education
+                  </span>
+                  <span className="text-[9px] text-neutral-400">MY PATHWAY</span>
+                </div>
+
+                <div className="flex flex-col gap-6">
+                  {/* Timeline 1 */}
+                  <div className="flex flex-col md:flex-row md:gap-6 border-l border-border-custom pl-5 relative">
+                    <span className="absolute left-[-4px] top-1 w-[7px] h-[7px] rounded-full bg-neutral-300 dark:bg-neutral-700 border-2 border-background" />
+                    <span className="text-[10px] text-neutral-400 md:w-28 shrink-0 pt-0.5">
+                      2023 — Present
+                    </span>
+                    <div className="flex flex-col gap-1 mt-1 md:mt-0">
+                      <h4 className="font-bold text-xs text-neutral-800 dark:text-neutral-100">
+                        BS Information Technology
+                      </h4>
+                      <p className="text-[10px] text-neutral-500">
+                        State University / 4th Year College Student
+                      </p>
+                      <p className="text-[11px] text-neutral-600 dark:text-neutral-400 mt-1.5 leading-relaxed">
+                        Focusing on Software Engineering principles, database
+                        structures, and dynamic web application routing. Project lead
+                        on various academic system designs.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* ---- 04 — Certifications ---- */}
+              <section
+                ref={certificationsRef}
+                className="scroll-mt-20 flex flex-col gap-4"
+              >
+                <div className="flex items-center justify-between border-b border-border-custom pb-2.5">
+                  <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-400 uppercase">
+                    04 — Certifications
+                  </span>
+                  <span className="text-[9px] text-neutral-400">MICROSOFT LEARN · {MS_LEARN_BADGES.length} BADGES</span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {MS_LEARN_BADGES.map((badge) => (
+                    <div
+                      key={badge.name}
+                      className={`group/badge flex items-center gap-2 px-3 py-1.5 border rounded-full bg-background transition-all duration-200 cursor-default ${
+                        badge.assessed
+                          ? "border-border-custom hover:border-neutral-400 dark:hover:border-neutral-500 text-neutral-800 dark:text-neutral-200"
+                          : "border-border-custom/60 hover:border-neutral-300 dark:hover:border-neutral-700 text-neutral-500 dark:text-neutral-400"
+                      }`}
+                    >
+                      <div className="flex items-center justify-center shrink-0">
+                        {badge.assessed ? (
+                          <ShieldCheck className="w-3 h-3 text-neutral-700 dark:text-neutral-300" style={{ imageRendering: 'pixelated' }} />
+                        ) : (
+                          <Award className="w-3 h-3 text-neutral-400 dark:text-neutral-500" style={{ imageRendering: 'pixelated' }} />
+                        )}
+                      </div>
+                      <span className="text-[10px] font-mono leading-none">
+                        {badge.name}
+                      </span>
+                      <span className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono ml-0.5">
+                        {badge.date}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
         </div>
       </main>
 
@@ -1060,7 +1320,7 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Footer */}
+      {/* Footer */}
               <div className="px-4 py-2 border-t border-border-custom bg-neutral-50 dark:bg-neutral-950/50 flex items-center justify-between text-[8px] text-neutral-400">
                 <span>Tab to input, type sentence to complete</span>
                 <span>ESC to close</span>
