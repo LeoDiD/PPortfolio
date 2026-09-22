@@ -21,29 +21,24 @@
   --color-foreground: var(--foreground);
   --color-grid: var(--grid-color);
   --color-border-custom: var(--border-color);
-  --font-sans: var(--font-pixel-body);
-  --font-mono: var(--font-pixel-body);
-  --font-pixel: var(--font-pixel-heading);
+  --font-sans: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-pixel: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-pixel-body), monospace;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Subtle dotted grid */
 .bg-dotted-grid {
   background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
   background-size: 24px 24px;
-}
-
-/* Pixel rendering for photobooth */
-.render-pixel {
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
 }
 
 /* CRT scanlines overlay */

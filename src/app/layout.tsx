@@ -1,23 +1,21 @@
 import type { Metadata } from "next";
-import { Press_Start_2P, Silkscreen } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const pixelHeading = Press_Start_2P({
-  variable: "--font-pixel-heading",
-  weight: "400",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const pixelBody = Silkscreen({
-  variable: "--font-pixel-body",
-  weight: ["400", "700"],
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "Leovi Garcia | Student Developer",
   description:
-    "Minimalist, pixel-themed portfolio website of Leovi Garcia, a 4th-year student developer building modern web & mobile applications.",
+    "Portfolio website of Leovi Garcia, a 4th-year student developer building modern web & mobile applications.",
 };
 
 export default function RootLayout({
@@ -28,10 +26,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${pixelHeading.variable} ${pixelBody.variable} h-full`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans antialiased">
         {children}
       </body>
     </html>
