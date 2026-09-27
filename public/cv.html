@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leovi Garcia - Curriculum Vitae</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --dark-bg: #2d2d2d;
+      --dark-sidebar: #2d2d2d;
+      --teal-accent: #555555;
+      --teal-light: #666666;
+      --text-white: #ffffff;
+      --text-muted-dark: #cccccc;
+      --text-main: #333333;
+      --text-heading: #1a1a1a;
+      --text-sub: #666666;
+      --bg-white: #ffffff;
+      --border-light: #dddddd;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #525659;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 32px;
+    }
+
+    /* Print Controls Bar */
+    .toolbar {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    .toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal-accent);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .toolbar-btn:hover {
+      background: #444444;
+      transform: translateY(-1px);
+    }
+
+    .toolbar-btn.secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+    }
+
+    .toolbar-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Page Container */
+    .page-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      height: 297mm;
+      background: var(--bg-white);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* ======================================================== */
+    /* PAGE 1: DUAL COLUMN LAYOUT                                */
+    /* ======================================================== */
+    .page-1-left {
+      width: 34%;
+      background-color: #ffffff;
+      color: #333333;
+      padding: 42px 24px 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      shrink: 0;
+      border-right: 2px solid #dddddd;
+    }
+
+    .name-block h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .name-block .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #666666;
+      line-height: 1.4;
+    }
+
+    .left-section {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .left-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+
+    .contact-list,
+    .portfolio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 9.5px;
+      color: #333333;
+      line-height: 1.3;
+      word-break: break-all;
+    }
+
+    .contact-item a {
+      color: #333333;
+      text-decoration: none;
+    }
+
+    .contact-icon {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #333333;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      shrink: 0;
+    }
+
+    .contact-icon svg {
+      width: 10px;
+      height: 10px;
+      stroke-width: 2.2;
+    }
+
+    .skill-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .skill-bullets li {
+      position: relative;
+      padding-left: 13px;
+      font-size: 10px;
+      color: #333333;
+      line-height: 1.38;
+      font-weight: 400;
+    }
+
+    .skill-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: #333333;
+      font-size: 11px;
+    }
+
+    .tech-stack-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+    }
+
+    .tech-stack-bullets li {
+      position: relative;
+      padding-left: 13px;
+      font-size: 9.5px;
+      color: #333333;
+      line-height: 1.35;
+    }
+
+    .tech-stack-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: #333333;
+      font-size: 11px;
+    }
+
+    /* RIGHT COLUMN */
+    .page-1-right {
+      width: 66%;
+      padding: 36px 34px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .right-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      color: var(--text-heading);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .teal-bar {
+      width: 100%;
+      height: 3px;
+      background-color: var(--teal-accent);
+      margin-top: 5px;
+      margin-bottom: 9px;
+      border-radius: 1px;
+    }
+
+    .summary-text {
+      font-size: 9.5px;
+      line-height: 1.52;
+      color: #444444;
+      text-align: justify;
+    }
+
+    .entry-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 9px;
+    }
+
+    .entry-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .entry-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.25;
+    }
+
+    .entry-subtitle {
+      font-size: 9px;
+      font-weight: 600;
+      color: #555555;
+      margin-top: 1px;
+      margin-bottom: 3px;
+    }
+
+    .entry-tech {
+      font-size: 8.5px;
+      color: #666666;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .entry-desc {
+      font-size: 9.2px;
+      line-height: 1.45;
+      color: #444444;
+      margin-bottom: 3px;
+      text-align: justify;
+    }
+
+    .entry-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5px;
+    }
+
+    .entry-bullets li {
+      position: relative;
+      padding-left: 13px;
+      font-size: 9px;
+      color: #444444;
+      line-height: 1.38;
+      text-align: justify;
+    }
+
+    .entry-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 3px;
+      color: #666666;
+      font-size: 10px;
+    }
+
+    /* ======================================================== */
+    /* PAGE 2: PROJECT SHOWCASE                                 */
+    /* ======================================================== */
+    .page-2-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+
+    .page-2-header {
+      background-color: #f5f5f5;
+      color: #1a1a1a;
+      padding: 30px 42px 24px 42px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-bottom: 2px solid #dddddd;
+    }
+
+    .page-2-header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: #1a1a1a;
+    }
+
+    .page-2-header .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #666666;
+    }
+
+    .showcase-content {
+      padding: 34px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .showcase-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      min-height: 200px;
+    }
+
+    .showcase-meta {
+      width: 32%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      shrink: 0;
+    }
+
+    .showcase-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--text-heading);
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .showcase-type {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #666666;
+    }
+
+    .showcase-tags {
+      font-size: 8.5px;
+      color: #888888;
+      line-height: 1.45;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .showcase-cards {
+      width: 68%;
+      display: flex;
+      gap: 14px;
+      align-items: stretch;
+      justify-content: flex-end;
+    }
+
+    .ui-mockup-card {
+      flex: 1;
+      max-width: 142px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 195px;
+    }
+
+    .mockup-bar {
+      padding: 4px 8px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .mockup-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #cbd5e1;
+    }
+
+    .mockup-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      color: #333333;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .mockup-body {
+      flex: 1;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      background: #ffffff;
+      font-size: 8px;
+    }
+
+    .mockup-dark {
+      background: #1e293b;
+      color: #f1f5f9;
+    }
+
+    .mockup-dark .mockup-bar {
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    .mockup-header-badge {
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 7.5px;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .badge-red {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .badge-teal {
+      background: #ccfbf1;
+      color: #0f766e;
+      border: 1px solid #99f6e4;
+    }
+
+    .badge-dark {
+      background: #334155;
+      color: #38bdf8;
+      border: 1px solid #475569;
+    }
+
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .mockup-stat-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 5px 4px;
+      text-align: center;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mockup-stat-val {
+      font-weight: 700;
+      font-size: 9px;
+      color: #1e293b;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .mockup-stat-lbl {
+      font-size: 6px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .mockup-scan-target {
+      margin: 4px auto;
+      width: 72px;
+      height: 72px;
+      border: 2px dashed var(--teal-accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 3px;
+      background: #f0fdfa;
+    }
+
+    .mockup-code-block {
+      background: #0f172a;
+      border-radius: 5px;
+      padding: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.8px;
+      color: #38bdf8;
+      line-height: 1.35;
+      overflow: hidden;
+    }
+
+    /* Print Setup */
+    @media print {
+      html,
+      body {
+        background-color: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        width: 210mm !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-sheet {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page-sheet:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Toolbar (Hidden when printing) -->
+  <div class="toolbar">
+    <span class="toolbar-title">Curriculum Vitae — Leovi Garcia</span>
+    <button class="toolbar-btn" onclick="window.print()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+      Print / Save PDF
+    </button>
+    <a href="/" class="toolbar-btn secondary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Back to Portfolio
+    </a>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- PAGE 1: RESUME & CREDENTIALS                              -->
+  <!-- ======================================================== -->
+  <div class="page-sheet" id="page-1">
+
+    <!-- LEFT COLUMN -->
+    <div class="page-1-left">
+      <!-- Identity -->
+      <div class="name-block">
+        <h1>LEOVI C. <br>GARCIA</h1>
+        <div class="subtitle">INFORMATION TECHNOLOGY PROFESSIONAL</div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="left-section">
+        <div class="left-heading">CONTACT INFORMATION</div>
+        <div class="contact-list">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
+            </div>
+            <span>+63 909 972 8765</span>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <span>leovigarcia07@gmail.com</span>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </div>
+            <span>linkedin.com/in/leovi-casipit-garcia</span>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <span>Mangaldan, Pangasinan, PH</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portfolio -->
+      <div class="left-section">
+        <div class="left-heading">PORTFOLIO</div>
+        <div class="portfolio-list">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                </path>
+              </svg>
+            </div>
+            <span>leovi.vercel.app</span>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+              </svg>
+            </div>
+            <span>github.com/LeoDiD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Skills -->
+      <div class="left-section">
+        <div class="left-heading">TECHNICAL SKILLS</div>
+        <ul class="skill-bullets">
+          <li>Full-Stack Web Development</li>
+          <li>Project Management</li>
+          <li>Microsoft Excel</li>
+          <li>System Development</li>
+          <li>Data Visualization</li>
+        </ul>
+      </div>
+
+      <!-- Programming Languages, Tools & Frameworks -->
+      <div class="left-section">
+        <div class="left-heading">PROGRAMMING<br>LANGUAGES, TOOLS &<br>FRAMEWORKS</div>
+        <ul class="tech-stack-bullets">
+          <li>TypeScript | JavaScript | Python</li>
+          <li>React | Next.js | Vue.js</li>
+          <li>React Native (Expo) | Tailwind CSS</li>
+          <li>FastAPI | Node.js | Express.js</li>
+          <li>PostgreSQL | MySQL | MongoDB Atlas</li>
+          <li>Git</li>
+        </ul>
+      </div>
+
+      <!-- Core Work Skills -->
+      <div class="left-section">
+        <div class="left-heading">CORE WORK SKILLS</div>
+        <ul class="skill-bullets">
+          <li>Critical Thinking</li>
+          <li>Teamwork & Collaboration</li>
+          <li>Time Management</li>
+          <li>Continuous Self-Learning</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="page-1-right">
+
+      <!-- Profile Summary -->
+      <div class="right-section">
+        <div class="right-heading">PROFILE SUMMARY</div>
+        <div class="teal-bar"></div>
+        <p class="summary-text">
+          A 4th-year Information Technology student with experience in web and software development, familiar with
+          React, Next.js, React Native, TypeScript, Python, and RESTful APIs. Also developing skills in data analytics
+          using Excel, spreadsheets, and Power BI, including basic data analysis and visualization. A collaborative and
+          adaptable learner with an interest in building practical software solutions.
+        </p>
+      </div>
+
+      <!-- Education and Certifications -->
+      <div class="right-section">
+        <div class="right-heading">EDUCATION AND CERTIFICATIONS</div>
+        <div class="teal-bar"></div>
+        <div class="entry-item">
+          <div class="entry-title">BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</div>
+          <div class="entry-subtitle">PHINMA University of Panga | 2023 – Present (4th Year College Student)</div>
+          <ul class="entry-bullets">
+            <li>Specializing in Business Informatics</li>
+            <li>Assessed & Certified: Power BI for Beginners | Simplilearn · Microsoft (2026)</li>
+            <li>Assessed & Certified: Introduction to MS Excel | Simplilearn · Microsoft (2026)</li>
+            <li>Microsoft Learn Badges & Completed Modules: Cloud Foundations, Microsoft Fabric & Copilot in Power BI</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="right-section">
+        <div class="right-heading">PROJECTS</div>
+        <div class="teal-bar"></div>
+
+        <!-- Project 1 -->
+        <div class="entry-item">
+          <div class="entry-title">KAPIT-BISIG: COMMUNITY RELIEF DISTRIBUTION SYSTEM</div>
+          <div class="entry-subtitle">Capstone / Featured Project | Jan 2026 – Oct 2026</div>
+          <div class="entry-tech">Next.js | Express.js | React Native (Expo) | FastAPI | DeepFace/OpenCV | Ethereum |
+            MongoDB Atlas</div>
+          <p class="entry-desc">
+            Architected and engineered a comprehensive disaster relief distribution ecosystem automating resident
+            registration, allocation targeting, QR-code claim scanning, and volunteer coordination.
+          </p>
+          <ul class="entry-bullets">
+            <li>Ensures rapid, fraud-free distribution using AI face verification (DeepFace/OpenCV) and biometric
+              identity matching.</li>
+            <li>Deployed Ethereum blockchain smart contracts for immutable claim records, ensuring absolute
+              transparency.</li>
+            <li>Delivered responsive web administrator portal and offline-resilient mobile app for field distribution
+              volunteers.</li>
+          </ul>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="entry-item">
+          <div class="entry-title">Atlas: A Seamless Coffee Ordering System</div>
+          <div class="entry-subtitle">Academic Project | 2025</div>
+          <div class="entry-tech">React | Vite | Tailwind CSS | Node.js | Express | MongoDB | OpenAI API | PayMongo |
+            Nodemailer | JWT | Axios</div>
+          <p class="entry-desc">
+            Designed, developed, and built a full-stack coffee ordering web application that streamlines the customer
+            ordering experience while providing café staff a comprehensive admin dashboard to manage operations.
+          </p>
+          <ul class="entry-bullets">
+            <li>Provides a complete menu browsing experience with categorized drinks (Coffee, Cold Brew, Frappe, Pastry,
+              Tea), customizable orders (size, sugar, add-ons), and a responsive shopping cart with real-time checkout.
+            </li>
+            <li>Integrates PayMongo payment gateway supporting GCash, PayMaya, and card payments with automatic
+              order confirmation and duplicate prevention.</li>
+            <li>Features an AI-powered chatbot using OpenAI GPT for customer assistance, and an AI-driven
+              recommendation engine that suggests drinks based on order history.</li>
+          </ul>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="entry-item">
+          <div class="entry-title">EZ MART: MOBILE GROCERY ORDERING SYSTEM</div>
+          <div class="entry-subtitle">Sophomore Second sem Final Project | 2024 – 2025</div>
+          <div class="entry-tech">Kotlin | PHP | HTML | CSS | Javascript</div>
+          <p class="entry-desc">
+            EZ Mart is a mobile grocery ordering system that lets users browse, select and submit orders, which are then
+            managed by admins through a web-based panel for efficient processing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div class="right-section">
+        <div class="right-heading">ACTIVITIES & COLLABORATIONS</div>
+        <div class="teal-bar"></div>
+        <div class="entry-item">
+          <div class="entry-title">STUDENT DEVELOPER INITIATIVE & PEER COLLABORATION</div>
+          <div class="entry-subtitle">Information Technology Department | 2023 – Present</div>
+          <ul class="entry-bullets">
+            <li>Collaborated with classmates on software development projects, contributing to coding, testing, and
+              troubleshooting.</li>
+            <li>Participated in activities involving web development, data analysis, and application development.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- PAGE 2: PROJECT SHOWCASE                                  -->
+  <!-- ======================================================== -->
+  <div class="page-sheet" id="page-2">
+    <div class="page-2-container">
+
+      <!-- Top Banner -->
+      <div class="page-2-header">
+        <h1>LEOVI C. GARCIA</h1>
+        <div class="subtitle">INFORMATION TECHNOLOGY PROFESSIONAL</div>
+      </div>
+
+      <!-- Showcase Rows -->
+      <div class="showcase-content">
+
+        <!-- Showcase 1: Kapit-Bisig -->
+        <div class="showcase-row">
+          <div class="showcase-meta">
+            <div class="showcase-title">KAPIT-BISIG: COMMUNITY RELIEF DISTRIBUTION SYSTEM</div>
+            <div class="showcase-type">Capstone Project | Jan 2026 – Oct 2026</div>
+            <div class="showcase-tags">
+              Next.js | Express.js | React Native (Expo) | FastAPI | DeepFace/OpenCV | Ethereum | MongoDB Atlas
+            </div>
+          </div>
+          <div class="showcase-cards">
+            <div class="ui-mockup-card" style="flex: 1.6; max-width: 275px;">
+              <div class="mockup-bar">
+                <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+                <div class="mockup-tag">Web Admin</div>
+              </div>
+              <div class="mockup-body" style="padding:0; overflow:hidden; background:#2c6b39; display:flex; align-items:center; justify-content:center;">
+                <img src="kapit_bisig_admin.png" alt="Kapit-Bisig Web Admin" style="width:100%; height:100%; object-fit:contain; display:block;">
+              </div>
+            </div>
+            <div class="ui-mockup-card" style="flex: 1; max-width: 175px;">
+              <div class="mockup-bar">
+                <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+                <div class="mockup-tag">Mobile App</div>
+              </div>
+              <div class="mockup-body" style="padding:0; overflow:hidden; background:#00cba0; display:flex; align-items:center; justify-content:center;">
+                <img src="kapit_bisig_mobile.png" alt="Kapit-Bisig Mobile App" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="width:100%; height:2px; background:#dddddd;"></div>
+
+        <!-- Showcase 2: Atlas Coffee Ordering -->
+        <div class="showcase-row">
+          <div class="showcase-meta">
+            <div class="showcase-title">ATLAS: A SEAMLESS COFFEE ORDERING SYSTEM</div>
+            <div class="showcase-type">Academic Project | 2025</div>
+            <div class="showcase-tags">
+              React | Vite | Tailwind CSS | Node.js | Express | MongoDB | OpenAI API | PayMongo | JWT
+            </div>
+          </div>
+          <div class="showcase-cards">
+            <div class="ui-mockup-card" style="flex: 1; max-width: 100%; width: 100%;">
+              <div class="mockup-bar">
+                <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+                <div class="mockup-tag">Web Application</div>
+              </div>
+              <div class="mockup-body" style="padding:0; overflow:hidden; background:#e2e2e2; display:flex; align-items:center; justify-content:center;">
+                <img src="atlas_showcase.png" alt="Atlas Coffee Ordering System" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="width:100%; height:2px; background:#dddddd;"></div>
+
+        <!-- Showcase 3: EZ Mart -->
+        <div class="showcase-row">
+          <div class="showcase-meta">
+            <div class="showcase-title">EZ MART: MOBILE GROCERY ORDERING SYSTEM</div>
+            <div class="showcase-type">Sophomore Final Project | 2024 – 2025</div>
+            <div class="showcase-tags">
+              Kotlin | PHP | HTML | CSS | Javascript
+            </div>
+          </div>
+          <div class="showcase-cards">
+            <div class="ui-mockup-card" style="flex: 1.6; max-width: 275px;">
+              <div class="mockup-bar">
+                <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+                <div class="mockup-tag">Web Admin</div>
+              </div>
+              <div class="mockup-body" style="padding:0; overflow:hidden; background:#6E9ADD; display:flex; align-items:center; justify-content:center;">
+                <img src="ezmart_admin.png" alt="EZ Mart Web Admin" style="width:100%; height:100%; object-fit:contain; display:block;">
+              </div>
+            </div>
+            <div class="ui-mockup-card" style="flex: 1; max-width: 175px;">
+              <div class="mockup-bar">
+                <div class="mockup-dots"><div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div></div>
+                <div class="mockup-tag">Mobile App</div>
+              </div>
+              <div class="mockup-body" style="padding:0; overflow:hidden; background:#7D99EF; display:flex; align-items:center; justify-content:center;">
+                <img src="ezmart_mobile.png" alt="EZ Mart Mobile App" style="width:100%; height:100%; object-fit:contain; display:block;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

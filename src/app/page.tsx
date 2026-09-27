@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   Camera,
   Keyboard,
@@ -26,6 +27,17 @@ import {
   Phone,
   MapPin,
   Globe,
+  FileText,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+  Check,
+  Copy,
+  ExternalLink,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  SlidersHorizontal,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -122,99 +134,194 @@ const TYPING_QUOTES = [
   },
 ];
 
+const CERTIFICATES = [
+  {
+    id: "power-bi",
+    title: "Power BI for Beginners",
+    badgeLabel: "BUSINESS INTELLIGENCE & ANALYTICS",
+    issuer: "Simplilearn | SkillUp",
+    partner: "Powered by Microsoft",
+    date: "23rd September 2026",
+    code: "10772938",
+    image: "/cert_power_bi.png",
+    overview:
+      "Successfully completed the certified online course 'Power BI for Beginners' delivered via Simplilearn in partnership with Microsoft. Demonstrated hands-on competence in business analytics, data modeling, DAX expressions, relational data transformations, interactive visual report design, and KPI dashboard architecture.",
+    skills: ["Power BI", "Data Modeling", "DAX Calculations", "Data Visualization", "Business Analytics"],
+    credentialUrl: "https://www.simplilearn.com/skillup-certificate-landing?vcode=10772938",
+  },
+  {
+    id: "ms-excel",
+    title: "Introduction to MS Excel",
+    badgeLabel: "DATA ANALYSIS & SPREADSHEET ARCHITECTURE",
+    issuer: "Simplilearn | SkillUp",
+    partner: "Powered by Microsoft",
+    date: "27th September 2026",
+    code: "10793361",
+    image: "/cert_ms_excel.png",
+    overview:
+      "Successfully completed the certified online course 'Introduction to MS Excel' delivered via Simplilearn in partnership with Microsoft. Demonstrated applied mastery of quantitative analysis, complex cell referencing, nested formulas, lookup structures, PivotTables, and structured data manipulation.",
+    skills: ["Microsoft Excel", "Spreadsheet Architecture", "Formulas & Functions", "PivotTables", "Data Analysis"],
+    credentialUrl: "https://www.simplilearn.com/skillup-certificate-landing?vcode=10793361",
+  },
+];
+
 const MS_LEARN_BADGES = [
-  { name: "Describe cloud service types", date: "7/21/2026", assessed: true },
-  { name: "Describe the benefits of using cloud services", date: "7/21/2026" },
-  { name: "Describe cloud computing", date: "7/21/2026", assessed: true },
-  { name: "Get started with Copilot in Power BI", date: "7/21/2026", assessed: true },
-  { name: "Introduction to end-to-end analytics using Microsoft Fabric", date: "7/21/2026", assessed: true },
-  { name: "Get started building with Power BI", date: "5/25/2026" },
-  { name: "Discover data analysis", date: "5/25/2026" },
+  { name: "Describe cloud service types", date: "7/21/2026", assessed: true, category: "cloud" as const },
+  { name: "Describe cloud computing", date: "7/21/2026", assessed: true, category: "cloud" as const },
+  { name: "Get started with Copilot in Power BI", date: "7/21/2026", assessed: true, category: "analytics" as const },
+  { name: "Introduction to end-to-end analytics using Microsoft Fabric", date: "7/21/2026", assessed: true, category: "analytics" as const },
+  { name: "Describe the benefits of using cloud services", date: "7/21/2026", assessed: false, category: "cloud" as const },
+  { name: "Get started building with Power BI", date: "5/25/2026", assessed: false, category: "analytics" as const },
+  { name: "Discover data analysis", date: "5/25/2026", assessed: false, category: "analytics" as const },
 ];
 
-const TECH_STACK_CATEGORIES = [
-  {
-    category: "FRONTEND",
-    items: [
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Next.js",
-      "Vue.js",
-      "Tailwind CSS",
-      "SCSS",
-      "Styled Components",
-      "Vite",
-      "Webpack",
-      "ESLint",
-      "Prettier",
-    ],
-  },
-  {
-    category: "BACKEND",
-    items: [
-      "Node.js",
-      "Python",
-      "Java",
-      "PHP",
-      "Express.js",
-      "NestJS",
-      "FastAPI",
-      "Spring Boot",
-      "Laravel",
-      "PostgreSQL",
-      "MySQL",
-      "MongoDB",
-      "DynamoDB",
-      "OAuth",
-      "JWT",
-      "LDAP",
-      "REST",
-      "GraphQL",
-      "gRPC",
-      "AWS Lambda",
-    ],
-  },
-  {
-    category: "DEVOPS & CLOUD",
-    items: [
-      "AWS",
-      "GCP",
-      "Azure",
-      "GitHub Actions",
-      "Jenkins",
-      "GitLab CI",
-      "Terraform",
-      "AWS CloudFormation",
-      "Docker",
-      "Kubernetes",
-      "Prometheus",
-      "Grafana",
-      "Datadog",
-    ],
-  },
-  {
-    category: "TOOLS & AI",
-    items: [
-      "PyTorch",
-      "Claude Code",
-      "Git",
-      "VS Code",
-      "Postman",
-      "Figma",
-      "Linux",
-      "Vercel",
-    ],
-  },
+const TECH_STACK_ITEMS = [
+  "MongoDB",
+  "Express.js",
+  "React",
+  "Next.js",
+  "Node.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "React Native (Expo)",
+  "FastAPI",
+  "Git & GitHub",
+  "Postman",
 ];
 
+/* ------------------------------------------------------------------ */
+/*  Skeleton Loader Component                                          */
+/* ------------------------------------------------------------------ */
 
+function PortfolioSkeleton() {
+  return (
+    <div className="relative w-full min-h-screen md:h-screen flex flex-col md:flex-row bg-background text-foreground bg-dotted-grid font-sans md:overflow-hidden antialiased">
+      {/* Mobile Header Skeleton */}
+      <header className="md:hidden flex items-center justify-between border-b border-border-custom bg-background/90 px-5 py-3.5 sticky top-0 z-40">
+        <div className="h-5 w-28 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-800 rounded-lg animate-pulse" />
+          <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-800 rounded-lg animate-pulse" />
+        </div>
+      </header>
+
+      {/* Desktop Sidebar Skeleton */}
+      <aside className="hidden md:flex flex-col w-[250px] min-h-screen border-r border-border-custom bg-background/50 px-6 py-7 justify-between shrink-0">
+        <div className="flex flex-col gap-7">
+          {/* Identity */}
+          <div className="flex flex-col gap-2">
+            <div className="h-6 w-32 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+            <div className="h-3 w-24 bg-neutral-200/80 dark:bg-neutral-800/80 rounded animate-pulse" />
+          </div>
+          {/* Nav */}
+          <div className="flex flex-col gap-2.5 pt-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-4 w-28 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+            ))}
+          </div>
+          {/* Utility buttons */}
+          <div className="flex flex-col gap-2 pt-2">
+            <div className="h-9 w-full bg-neutral-200/60 dark:bg-neutral-800/60 rounded-lg animate-pulse" />
+            <div className="h-9 w-full bg-neutral-200/60 dark:bg-neutral-800/60 rounded-lg animate-pulse" />
+          </div>
+        </div>
+        {/* Bottom */}
+        <div className="h-8 w-full bg-neutral-200/60 dark:bg-neutral-800/60 rounded-lg animate-pulse" />
+      </aside>
+
+      {/* Main Content Skeleton */}
+      <main className="flex-1 flex flex-col items-center pt-8 md:pt-16 pb-16 md:pb-0 px-4 sm:px-6 md:px-16 w-full md:overflow-y-auto">
+        <div className="w-full max-w-4xl flex flex-col gap-14">
+          {/* Profile Header Skeleton */}
+          <div className="flex flex-col gap-4 text-center md:text-left">
+            <div className="h-3 w-20 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse mx-auto md:mx-0" />
+            <div className="h-12 w-64 bg-neutral-200 dark:bg-neutral-800 rounded-lg animate-pulse mx-auto md:mx-0" />
+            <div className="h-5 w-40 bg-neutral-200/80 dark:bg-neutral-800/80 rounded animate-pulse mx-auto md:mx-0" />
+            <div className="flex flex-col gap-2 max-w-xl mx-auto md:mx-0 pt-2">
+              <div className="h-4 w-full bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+              <div className="h-4 w-5/6 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+              <div className="h-4 w-4/6 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+            </div>
+            {/* Social pills */}
+            <div className="flex items-center justify-center md:justify-start gap-3 pt-2">
+              <div className="h-7 w-20 bg-neutral-200/60 dark:bg-neutral-800/60 rounded-md animate-pulse" />
+              <div className="h-7 w-24 bg-neutral-200/60 dark:bg-neutral-800/60 rounded-md animate-pulse" />
+              <div className="h-7 w-20 bg-neutral-200/60 dark:bg-neutral-800/60 rounded-md animate-pulse" />
+            </div>
+          </div>
+
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-2 border-y border-border-custom divide-x divide-border-custom py-2 rounded-lg">
+            <div className="p-6 flex flex-col items-center gap-2">
+              <div className="h-8 w-20 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+              <div className="h-3 w-24 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+            </div>
+            <div className="p-6 flex flex-col items-center gap-2">
+              <div className="h-8 w-16 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+              <div className="h-3 w-24 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+            </div>
+          </div>
+
+          {/* Projects Skeleton */}
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between border-b border-border-custom pb-3">
+              <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+              <div className="h-6 w-28 bg-neutral-200 dark:bg-neutral-800 rounded-md animate-pulse" />
+            </div>
+            {[1, 2].map((i) => (
+              <div key={i} className="flex flex-col gap-3 border-l-2 border-border-custom pl-5 py-1">
+                <div className="h-5 w-48 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+                <div className="h-4 w-full bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+                <div className="h-4 w-4/5 bg-neutral-200/70 dark:bg-neutral-800/70 rounded animate-pulse" />
+                <div className="flex gap-2 pt-1">
+                  {[1, 2, 3, 4].map((j) => (
+                    <div key={j} className="h-6 w-16 bg-neutral-200/60 dark:bg-neutral-800/60 rounded animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Stack Skeleton */}
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between border-b border-border-custom pb-3">
+              <div className="h-4 w-28 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
+              <div className="h-6 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-md animate-pulse" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-28 bg-neutral-200/50 dark:bg-neutral-800/50 border border-border-custom rounded-xl animate-pulse" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
+  /* ---- Loading Skeleton ---- */
+  const [isLoading, setIsLoading] = useState(true);
+
+  /* ---- Project Details Toggle ---- */
+  const [showAllProjectDetails, setShowAllProjectDetails] = useState(false);
+  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+
+  const toggleProjectExpand = (id: string) => {
+    setExpandedProjects((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  /* ---- Badges Modal Toggle ---- */
+  const [isBadgesModalOpen, setIsBadgesModalOpen] = useState(false);
+
   /* ---- UI & Theme ---- */
   const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -244,6 +351,28 @@ export default function Home() {
   const [isTypingCompleted, setIsTypingCompleted] = useState(false);
   const typingInputRef = useRef<HTMLTextAreaElement>(null);
 
+  /* ---- Certifications & Badges ---- */
+  const [currentCertIndex, setCurrentCertIndex] = useState(0);
+  const [selectedCertModal, setSelectedCertModal] = useState<(typeof CERTIFICATES)[number] | null>(null);
+  const [copiedCertCode, setCopiedCertCode] = useState<string | null>(null);
+  const [badgeFilter, setBadgeFilter] = useState<"all" | "assessed" | "analytics" | "cloud">("all");
+
+  const handleCopyCode = (code: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      setCopiedCertCode(code);
+      setTimeout(() => setCopiedCertCode(null), 2000);
+    }
+  };
+
+  const nextCert = () => {
+    setCurrentCertIndex((prev) => (prev + 1) % CERTIFICATES.length);
+  };
+
+  const prevCert = () => {
+    setCurrentCertIndex((prev) => (prev - 1 + CERTIFICATES.length) % CERTIFICATES.length);
+  };
+
 
 
   /* ---- Scroll & Navigation Refs ---- */
@@ -260,52 +389,94 @@ export default function Home() {
   /*  Effects                                                          */
   /* ================================================================ */
 
+  /* ---- Skeleton Loading Timer ---- */
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
+    return () => clearTimeout(timer);
+  }, []);
+
   /* Scrollspy: track active section */
+  const checkActiveSection = useCallback(() => {
+    const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+    const mainEl = mainRef.current;
+    
+    // 1. Check if user is scrolled to the bottom of the content
+    const atBottom = isDesktop && mainEl
+      ? mainEl.scrollHeight - mainEl.scrollTop - mainEl.clientHeight <= 120
+      : typeof window !== "undefined" &&
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120;
+
+    if (atBottom) {
+      setActiveNav("certifications");
+      return;
+    }
+
+    const sections: {
+      id: "projects" | "stack" | "experience" | "certifications";
+      ref: React.RefObject<HTMLDivElement | null>;
+    }[] = [
+      { id: "projects", ref: projectsRef },
+      { id: "stack", ref: stackRef },
+      { id: "experience", ref: experienceRef },
+      { id: "certifications", ref: certificationsRef },
+    ];
+
+    // Reference focal line in viewport
+    const focalPoint = typeof window !== "undefined" ? Math.min(window.innerHeight * 0.35, 220) : 180;
+
+    // Check which section contains the focal reading line
+    for (const section of sections) {
+      const el = section.ref.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= focalPoint && rect.bottom > focalPoint) {
+          setActiveNav(section.id);
+          return;
+        }
+      }
+    }
+
+    // If above the first section (e.g. Hero / Profile Header)
+    const projectsEl = projectsRef.current;
+    if (projectsEl) {
+      const rect = projectsEl.getBoundingClientRect();
+      if (rect.top > focalPoint) {
+        setActiveNav("projects");
+        return;
+      }
+    }
+
+    // Fallback: check backwards for the highest section that has passed the focal line
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const el = sections[i].ref.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= focalPoint) {
+          setActiveNav(sections[i].id);
+          return;
+        }
+      }
+    }
+
+    setActiveNav("projects");
+  }, []);
+
+  const handleMainScroll = useCallback(() => {
+    if (isNavigatingRef.current) return;
+    checkActiveSection();
+  }, [checkActiveSection]);
+
   useEffect(() => {
     let ticking = false;
 
-    const determineActiveSection = (): "projects" | "stack" | "experience" | "certifications" => {
-      const mainEl = mainRef.current;
-      const atBottom = mainEl
-        ? mainEl.scrollHeight - mainEl.scrollTop - mainEl.clientHeight <= 120
-        : typeof window !== "undefined" &&
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120;
-
-      if (atBottom) {
-        return "certifications";
-      }
-
-      const sections: {
-        id: "projects" | "stack" | "experience" | "certifications";
-        ref: React.RefObject<HTMLDivElement | null>;
-      }[] = [
-          { id: "projects", ref: projectsRef },
-          { id: "stack", ref: stackRef },
-          { id: "experience", ref: experienceRef },
-          { id: "certifications", ref: certificationsRef },
-        ];
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = sections[i].ref.current;
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 250) {
-            return sections[i].id;
-          }
-        }
-      }
-
-      return "projects";
-    };
-
     const handleScroll = () => {
       if (isNavigatingRef.current) return;
-
       if (!ticking) {
         window.requestAnimationFrame(() => {
           if (!isNavigatingRef.current) {
-            const nextActive = determineActiveSection();
-            setActiveNav(nextActive);
+            checkActiveSection();
           }
           ticking = false;
         });
@@ -320,23 +491,45 @@ export default function Home() {
       }
     };
 
-    const mainEl = mainRef.current;
-    mainEl?.addEventListener("scroll", handleScroll, { passive: true });
+    let cleanupMain: (() => void) | null = null;
+    const attachMainListener = () => {
+      const mainEl = mainRef.current;
+      if (mainEl) {
+        mainEl.addEventListener("scroll", handleScroll, { passive: true });
+        mainEl.addEventListener("wheel", handleUserInteraction, { passive: true });
+        mainEl.addEventListener("touchmove", handleUserInteraction, { passive: true });
+        cleanupMain = () => {
+          mainEl.removeEventListener("scroll", handleScroll);
+          mainEl.removeEventListener("wheel", handleUserInteraction);
+          mainEl.removeEventListener("touchmove", handleUserInteraction);
+        };
+        handleScroll();
+        return true;
+      }
+      return false;
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("wheel", handleUserInteraction, { passive: true });
     window.addEventListener("touchmove", handleUserInteraction, { passive: true });
 
-    // Initial sync
-    handleScroll();
+    if (!attachMainListener()) {
+      const interval = setInterval(() => {
+        if (attachMainListener()) {
+          clearInterval(interval);
+        }
+      }, 50);
+      setTimeout(() => clearInterval(interval), 2500);
+    }
 
     return () => {
-      mainEl?.removeEventListener("scroll", handleScroll);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleUserInteraction);
       window.removeEventListener("touchmove", handleUserInteraction);
+      if (cleanupMain) cleanupMain();
       if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current);
     };
-  }, []);
+  }, [isLoading, checkActiveSection, showAllProjectDetails, expandedProjects]);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
@@ -379,6 +572,8 @@ export default function Home() {
           if (p) resetTyping();
           return false;
         });
+        setSelectedCertModal(null);
+        setIsBadgesModalOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -594,101 +789,104 @@ export default function Home() {
   /* ================================================================ */
 
   return (
-    <div className="relative md:h-screen flex flex-col md:flex-row bg-background text-foreground bg-dotted-grid font-sans md:overflow-hidden selection:bg-neutral-200 dark:selection:bg-neutral-800 antialiased">
-      {/* ==================== Mobile Header ==================== */}
-      <header className="md:hidden flex items-center justify-between border-b border-border-custom bg-background/90 backdrop-blur px-5 py-3.5 z-40 sticky top-0">
-        <button
-          onClick={scrollToHero}
-          className="text-base font-bold tracking-tight text-left hover:text-neutral-500 transition-colors cursor-pointer"
+    <AnimatePresence mode="wait">
+      {isLoading ? (
+        <PortfolioSkeleton key="skeleton" />
+      ) : (
+        <motion.div
+          key="portfolio-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.35 }}
+          className="relative w-full min-h-screen md:h-screen flex flex-col md:flex-row bg-background text-foreground bg-dotted-grid font-sans md:overflow-hidden selection:bg-neutral-200 dark:selection:bg-neutral-800 antialiased"
         >
-          Leovi Garcia
-        </button>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggleTheme}
-            className="p-2 border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition"
-            aria-label="Toggle Theme"
-          >
-            {isDark ? (
-              <Sun className="w-4 h-4" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
-          </button>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-4 h-4" />
-            ) : (
-              <Menu className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-      </header>
-
-      {/* ==================== Mobile Menu ==================== */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.12 }}
-            className="md:hidden fixed top-[59px] left-0 right-0 bg-background border-b border-border-custom px-5 py-4 flex flex-col gap-3 z-30 shadow-md"
-          >
+          {/* ==================== Mobile Header ==================== */}
+          <header className="md:hidden flex items-center justify-between border-b border-border-custom bg-background/90 backdrop-blur px-5 py-3.5 z-40 sticky top-0">
             <button
-              onClick={() => navigateToSection("projects", projectsRef)}
-              className={`text-left text-sm py-2 hover:pl-2 transition-all cursor-pointer ${activeNav === "projects" ? "font-bold text-foreground" : ""
-                }`}
+              onClick={scrollToHero}
+              className="text-lg font-bold tracking-tight text-left hover:text-neutral-500 transition-colors cursor-pointer"
             >
-              01. Projects
+              Leovi Garcia
             </button>
-            <button
-              onClick={() => navigateToSection("stack", stackRef)}
-              className={`text-left text-sm py-2 hover:pl-2 transition-all cursor-pointer ${activeNav === "stack" ? "font-bold text-foreground" : ""
-                }`}
-            >
-              02. Stack
-            </button>
-            <button
-              onClick={() => navigateToSection("experience", experienceRef)}
-              className={`text-left text-sm py-2 hover:pl-2 transition-all cursor-pointer ${activeNav === "experience" ? "font-bold text-foreground" : ""
-                }`}
-            >
-              03. Experience
-            </button>
-            <button
-              onClick={() => navigateToSection("certifications", certificationsRef)}
-              className={`text-left text-sm py-2 hover:pl-2 transition-all cursor-pointer ${activeNav === "certifications" ? "font-bold text-foreground" : ""
-                }`}
-            >
-              04. Certifications
-            </button>
-            <div className="border-t border-border-custom pt-3 flex flex-col gap-2">
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => {
-                  setIsPhotoboothOpen(true);
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-2.5 text-sm py-2 hover:pl-2 transition-all cursor-pointer"
+                onClick={toggleTheme}
+                className="p-2 border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition"
+                aria-label="Toggle Theme"
               >
-                <Camera className="w-4 h-4" /> Photobooth
+                {isDark ? (
+                  <Sun className="w-4 h-4" />
+                ) : (
+                  <Moon className="w-4 h-4" />
+                )}
               </button>
               <button
-                onClick={() => {
-                  setIsTypingOpen(true);
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-2.5 text-sm py-2 hover:pl-2 transition-all cursor-pointer"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition"
               >
-                <Keyboard className="w-4 h-4" /> Typing Test
+                {mobileMenuOpen ? (
+                  <X className="w-4 h-4" />
+                ) : (
+                  <Menu className="w-4 h-4" />
+                )}
               </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </header>
+
+          {/* ==================== Mobile Menu ==================== */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.12 }}
+                className="md:hidden fixed top-[59px] left-0 right-0 bg-background border-b border-border-custom px-5 py-4 flex flex-col gap-2 z-30 shadow-md"
+              >
+                {[
+                  { id: "projects", label: "Projects", ref: projectsRef },
+                  { id: "stack", label: "Stack", ref: stackRef },
+                  { id: "experience", label: "Experience", ref: experienceRef },
+                  { id: "certifications", label: "Certifications", ref: certificationsRef },
+                ].map((item) => {
+                  const isActive = activeNav === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => navigateToSection(item.id as typeof activeNav, item.ref)}
+                      className={`text-left text-sm py-2 px-1 transition-all cursor-pointer ${
+                        isActive
+                          ? "font-bold text-foreground"
+                          : "text-neutral-500 hover:text-foreground"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+                <div className="border-t border-border-custom pt-3 flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      setIsPhotoboothOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2.5 text-sm py-2 hover:pl-2 transition-all cursor-pointer"
+                  >
+                    <Camera className="w-4 h-4" /> Photobooth
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsTypingOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2.5 text-sm py-2 hover:pl-2 transition-all cursor-pointer"
+                  >
+                    <Keyboard className="w-4 h-4" /> Typing Test
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
       {/* ==================== Desktop Sidebar ==================== */}
       <aside className="hidden md:flex flex-col w-[250px] min-h-screen border-r border-border-custom bg-background/50 backdrop-blur sticky top-0 px-6 py-7 justify-between shrink-0 select-none z-20">
@@ -699,7 +897,7 @@ export default function Home() {
             onClick={scrollToHero}
             className="flex flex-col text-left group cursor-pointer focus:outline-none"
           >
-            <h1 className="text-lg font-bold tracking-tight group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
               Leovi Garcia
             </h1>
             <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">
@@ -709,54 +907,27 @@ export default function Home() {
 
           {/* Navigation */}
           <nav className="flex flex-col gap-3 text-sm">
-            <button
-              onClick={() => navigateToSection("projects", projectsRef)}
-              className={`group flex items-center justify-between transition-all text-left py-0.5 cursor-pointer ${activeNav === "projects"
-                  ? "text-foreground font-bold"
-                  : "text-neutral-500 hover:text-foreground"
-                }`}
-            >
-              <span>Projects</span>
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono text-neutral-400">
-                01
-              </span>
-            </button>
-            <button
-              onClick={() => navigateToSection("stack", stackRef)}
-              className={`group flex items-center justify-between transition-all text-left py-0.5 cursor-pointer ${activeNav === "stack"
-                  ? "text-foreground font-bold"
-                  : "text-neutral-500 hover:text-foreground"
-                }`}
-            >
-              <span>Stack</span>
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono text-neutral-400">
-                02
-              </span>
-            </button>
-            <button
-              onClick={() => navigateToSection("experience", experienceRef)}
-              className={`group flex items-center justify-between transition-all text-left py-0.5 cursor-pointer ${activeNav === "experience"
-                  ? "text-foreground font-bold"
-                  : "text-neutral-500 hover:text-foreground"
-                }`}
-            >
-              <span>Experience</span>
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono text-neutral-400">
-                03
-              </span>
-            </button>
-            <button
-              onClick={() => navigateToSection("certifications", certificationsRef)}
-              className={`group flex items-center justify-between transition-all text-left py-0.5 cursor-pointer ${activeNav === "certifications"
-                  ? "text-foreground font-bold"
-                  : "text-neutral-500 hover:text-foreground"
-                }`}
-            >
-              <span>Certifications</span>
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono text-neutral-400">
-                04
-              </span>
-            </button>
+            {[
+              { id: "projects", label: "Projects", ref: projectsRef },
+              { id: "stack", label: "Stack", ref: stackRef },
+              { id: "experience", label: "Experience", ref: experienceRef },
+              { id: "certifications", label: "Certifications", ref: certificationsRef },
+            ].map((item) => {
+              const isActive = activeNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => navigateToSection(item.id as typeof activeNav, item.ref)}
+                  className={`text-left py-0.5 transition-colors cursor-pointer ${
+                    isActive
+                      ? "text-foreground font-bold"
+                      : "text-neutral-500 hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
           </nav>
 
           {/* Interactive Widgets */}
@@ -805,7 +976,11 @@ export default function Home() {
       </aside>
 
       {/* ==================== Main Content ==================== */}
-      <main ref={mainRef} className="flex-1 flex flex-col items-center pt-10 md:pt-16 pb-0 px-6 md:px-16 overflow-y-auto overscroll-contain">
+      <main
+        ref={mainRef}
+        onScroll={handleMainScroll}
+        className="flex-1 flex flex-col items-center pt-8 md:pt-16 pb-16 md:pb-0 px-4 sm:px-6 md:px-16 w-full md:overflow-y-auto md:overscroll-contain bg-dotted-grid"
+      >
         <div className="w-full max-w-4xl flex flex-col gap-16 pb-0">
           {/* ---- Profile Header ---- */}
           <section ref={heroRef} className="flex flex-col gap-6 pt-2 md:pt-8 text-center md:text-left">
@@ -814,7 +989,10 @@ export default function Home() {
               <span className="text-xs uppercase tracking-[0.2em] text-neutral-400 font-mono font-semibold">
                 Portfolio
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50 leading-[1.1]">
+              <h1
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50 leading-[1.05] glitch-hover"
+                data-text="Leovi Garcia"
+              >
                 Leovi Garcia
               </h1>
               <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 font-medium">
@@ -895,11 +1073,25 @@ export default function Home() {
 
           {/* ---- 01 — Projects ---- */}
           <section ref={projectsRef} className="scroll-mt-20 flex flex-col gap-6">
-            <div className="flex items-center justify-between border-b border-border-custom pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-custom pb-3 gap-2">
               <span className="text-xs md:text-sm font-bold tracking-[0.15em] text-neutral-400 uppercase font-mono">
                 01 — Projects
               </span>
-              <span className="text-xs text-neutral-400 font-mono">FEATURED WORK</span>
+              <button
+                onClick={() => setShowAllProjectDetails(!showAllProjectDetails)}
+                className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono border transition-all cursor-pointer self-start sm:self-auto ${
+                  showAllProjectDetails
+                    ? "border-neutral-800 dark:border-neutral-200 bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 font-bold shadow-2xs"
+                    : "border-border-custom bg-background text-neutral-600 dark:text-neutral-400 hover:text-foreground hover:border-neutral-400 dark:hover:border-neutral-600"
+                }`}
+                title="Click to toggle full detailed breakdown for all projects"
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>FEATURED WORK</span>
+                <span className="text-[10px] opacity-75 font-mono ml-0.5">
+                  {showAllProjectDetails ? "[COMPACT VIEW]" : "[SHOW FULL SPECS]"}
+                </span>
+              </button>
             </div>
 
             <div className="flex flex-col gap-8">
@@ -909,15 +1101,59 @@ export default function Home() {
                 <span className="text-xs text-neutral-400 md:w-32 shrink-0 pt-0.5 font-mono">
                   01/2026 – 10/2026
                 </span>
-                <div className="flex flex-col gap-2.5 mt-1 md:mt-0">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-2.5 mt-1 md:mt-0 flex-1">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <h4 className="font-bold text-base md:text-lg text-neutral-900 dark:text-neutral-100">
                       Kapit-Bisig
                     </h4>
+                    <button
+                      onClick={() => toggleProjectExpand("kapit-bisig")}
+                      className="inline-flex items-center gap-1 text-xs font-mono text-neutral-500 hover:text-foreground transition cursor-pointer"
+                    >
+                      {showAllProjectDetails || expandedProjects["kapit-bisig"] ? (
+                        <>
+                          <ChevronUp className="w-3.5 h-3.5" />
+                          <span>Hide details</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                          <span>Details</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                   <p className="text-sm md:text-[15px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                    a full-stack community relief distribution system built with Next.js, Express.js, React Native (Expo), and FastAPI. The platform manages the complete relief workflow — from resident registration and beneficiary targeting to QR-code-based claim scanning and volunteer coordination. Integrated AI-powered face recognition (DeepFace/OpenCV) for identity verification and Ethereum blockchain for tamper-proof claim records, backed by MongoDB Atlas.
+                    A full-stack community disaster relief platform automating resident enrollment, quota allocation, and QR-code claim validation. Integrated AI face verification (DeepFace) and Ethereum smart contracts for transparent, fraud-free delivery.
                   </p>
+
+                  {/* Expanded Breakdown */}
+                  {(showAllProjectDetails || expandedProjects["kapit-bisig"]) && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex flex-col gap-2 p-3.5 rounded-lg border border-border-custom bg-neutral-50/50 dark:bg-neutral-900/30 text-xs md:text-sm text-neutral-600 dark:text-neutral-300 mt-1"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Architecture:</strong> Next.js frontend, Express.js API, React Native (Expo) mobile client, and FastAPI microservices backed by MongoDB Atlas.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Biometric Verification:</strong> Integrated DeepFace/OpenCV facial recognition to eliminate duplicate and proxy claims during relief distribution.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Blockchain Transparency:</strong> Ethereum smart contracts provide tamper-proof, publicly verifiable audit records of relief disbursements.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Field Operations:</strong> Real-time QR claim scanner with offline capability for volunteers handling on-ground packet distribution.</span>
+                      </div>
+                    </motion.div>
+                  )}
+
                   <div className="flex flex-wrap gap-2 pt-1">
                     {[
                       "Next.js",
@@ -927,6 +1163,94 @@ export default function Home() {
                       "DeepFace/OpenCV",
                       "Ethereum",
                       "MongoDB Atlas",
+                    ].map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 border border-border-custom bg-background rounded-md text-xs text-neutral-600 dark:text-neutral-400 font-mono"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 2: Full-Stack Coffee Ordering Web App */}
+              <div className="flex flex-col md:flex-row md:gap-6 border-l-2 border-border-custom pl-5 relative group">
+                <span className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-neutral-400 dark:bg-neutral-600 border-2 border-background group-hover:bg-foreground transition-colors" />
+                <span className="text-xs text-neutral-400 md:w-32 shrink-0 pt-0.5 font-mono">
+                  2025
+                </span>
+                <div className="flex flex-col gap-2.5 mt-1 md:mt-0 flex-1">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h4 className="font-bold text-base md:text-lg text-neutral-900 dark:text-neutral-100">
+                      Full-Stack Coffee Ordering Web App
+                    </h4>
+                    <button
+                      onClick={() => toggleProjectExpand("coffee-app")}
+                      className="inline-flex items-center gap-1 text-xs font-mono text-neutral-500 hover:text-foreground transition cursor-pointer"
+                    >
+                      {showAllProjectDetails || expandedProjects["coffee-app"] ? (
+                        <>
+                          <ChevronUp className="w-3.5 h-3.5" />
+                          <span>Hide details</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                          <span>Details</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-sm md:text-[15px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                    An end-to-end café e-commerce platform and staff management suite. Features categorized ordering, customized drinks, PayMongo payment gateway (GCash, Maya, cards), OpenAI GPT ordering assistant, and a role-based admin dashboard with live sales metrics.
+                  </p>
+
+                  {/* Expanded Breakdown */}
+                  {(showAllProjectDetails || expandedProjects["coffee-app"]) && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex flex-col gap-2 p-3.5 rounded-lg border border-border-custom bg-neutral-50/50 dark:bg-neutral-900/30 text-xs md:text-sm text-neutral-600 dark:text-neutral-300 mt-1"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Interactive Menu:</strong> Categorized beverages & pastries with size/sugar customization and instant cart calculation.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Payment Gateway:</strong> PayMongo integration supporting GCash, Maya, and credit/debit cards with automated payment confirmations.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>AI Assistant:</strong> OpenAI GPT conversational ordering chatbot and intelligent recommendation engine.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Operations Dashboard:</strong> Role-based admin panel with order status pipeline (Pending → Preparing → Ready → Completed), product catalog CRUD, and visual sales analytics charts.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-neutral-400 font-mono mt-0.5">•</span>
+                        <span><strong>Security:</strong> JWT token authentication, bcrypt password hashing, Nodemailer OTP password recovery, and live customer notifications.</span>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {[
+                      "React",
+                      "Vite",
+                      "Tailwind CSS",
+                      "Node.js",
+                      "Express",
+                      "MongoDB",
+                      "OpenAI API",
+                      "PayMongo",
+                      "Nodemailer",
+                      "JWT",
+                      "Axios",
                     ].map((tech) => (
                       <span
                         key={tech}
@@ -950,32 +1274,30 @@ export default function Home() {
               <span className="text-xs md:text-sm font-bold tracking-[0.15em] text-neutral-400 uppercase font-mono">
                 02 — Stack
               </span>
-              <span className="text-xs text-neutral-400 font-mono">
-                TECH & PLATFORMS
-              </span>
+              <span className="text-xs text-neutral-400 font-mono">CORE EXPERTISE</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TECH_STACK_CATEGORIES.map((cat) => (
-                <div
-                  key={cat.category}
-                  className="flex flex-col gap-3 p-5 border border-border-custom rounded-xl bg-background/50 hover:border-neutral-400/60 dark:hover:border-neutral-600/60 transition-colors"
-                >
-                  <span className="text-xs font-bold tracking-[0.15em] text-neutral-400 uppercase font-mono">
-                    {cat.category}
+            {/* Single Container: Tech Stack */}
+            <div className="p-5 md:p-6 border border-border-custom rounded-2xl bg-neutral-50/30 dark:bg-neutral-950/30 hover:border-neutral-400/60 dark:hover:border-neutral-600/60 transition-all duration-200 shadow-2xs flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm md:text-base font-bold font-mono tracking-tight text-neutral-900 dark:text-neutral-100 uppercase">
+                  Tech Stack
+                </span>
+                <span className="text-[11px] font-mono text-neutral-400">
+                  {TECH_STACK_ITEMS.length} TECHNOLOGIES & TOOLS
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-1">
+                {TECH_STACK_ITEMS.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3.5 py-1.5 border border-border-custom bg-background rounded-lg text-xs font-mono font-medium text-neutral-800 dark:text-neutral-200 shadow-2xs hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-foreground transition duration-150 cursor-default select-none"
+                  >
+                    {tech}
                   </span>
-                  <div className="flex flex-wrap gap-2">
-                    {cat.items.map((item) => (
-                      <span
-                        key={item}
-                        className="px-3.5 py-1.5 border border-border-custom bg-background rounded-md text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-foreground transition duration-150 cursor-default select-none shadow-2xs"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
 
@@ -1018,39 +1340,107 @@ export default function Home() {
           {/* ---- 04 — Certifications ---- */}
           <section
             ref={certificationsRef}
-            className="scroll-mt-20 flex flex-col gap-5"
+            className="scroll-mt-20 flex flex-col gap-6"
           >
-            <div className="flex items-center justify-between border-b border-border-custom pb-3">
+            {/* Section Header with Microsoft Learn Badges Count Button */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-custom pb-3 gap-3">
               <span className="text-xs md:text-sm font-bold tracking-[0.15em] text-neutral-400 uppercase font-mono">
                 04 — Certifications
               </span>
-              <span className="text-xs text-neutral-400 font-mono">MICROSOFT LEARN · {MS_LEARN_BADGES.length} BADGES</span>
+
+              {/* Microsoft Learn Badges Icon (Black) + Counter Trigger Button */}
+              <button
+                onClick={() => setIsBadgesModalOpen(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border-custom bg-background/80 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-mono transition-all cursor-pointer shadow-2xs hover:border-neutral-400 dark:hover:border-neutral-600 group self-start sm:self-auto"
+                title="View Microsoft Learn Badges & Completed Modules"
+              >
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900">
+                  <ShieldCheck className="w-3.5 h-3.5 text-white dark:text-neutral-900" />
+                </div>
+                <span className="font-bold text-foreground">{MS_LEARN_BADGES.length}</span>
+                <span className="text-neutral-500 group-hover:text-foreground">Microsoft Learn Badges</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
             </div>
 
-            <div className="flex flex-wrap gap-2.5">
-              {MS_LEARN_BADGES.map((badge) => (
-                <div
-                  key={badge.name}
-                  className={`group/badge flex items-center gap-2.5 px-3.5 py-2 border rounded-full bg-background transition-all duration-200 cursor-default ${badge.assessed
-                      ? "border-border-custom hover:border-neutral-400 dark:hover:border-neutral-500 text-neutral-800 dark:text-neutral-200 shadow-2xs"
-                      : "border-border-custom/60 hover:border-neutral-300 dark:hover:border-neutral-700 text-neutral-500 dark:text-neutral-400"
-                    }`}
+            {/* Compact Minimalist shadcn-style Certificate Carousel */}
+            <div className="relative max-w-xl mx-auto w-full flex flex-col items-center gap-3">
+              {/* Carousel Viewport Container */}
+              <div className="relative w-full overflow-hidden rounded-2xl border border-border-custom bg-neutral-50/50 dark:bg-neutral-950/50 p-2.5 sm:p-3 shadow-2xs group">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={CERTIFICATES[currentCertIndex].id}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    onClick={() => setSelectedCertModal(CERTIFICATES[currentCertIndex])}
+                    className="relative aspect-[2105/1489] w-full rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white shadow-xs hover:shadow-md cursor-pointer transition-all duration-300"
+                  >
+                    <img
+                      src={CERTIFICATES[currentCertIndex].image}
+                      alt={CERTIFICATES[currentCertIndex].title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+                    />
+                    {/* Subtle Click Hint Overlay */}
+                    <div className="absolute inset-0 bg-neutral-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 dark:bg-neutral-900/95 text-neutral-900 dark:text-neutral-100 font-mono text-xs font-semibold shadow-lg border border-border-custom">
+                        <ZoomIn className="w-3.5 h-3.5" />
+                        <span>Click to view full details</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Floating Prev / Next Buttons */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevCert();
+                  }}
+                  aria-label="Previous Certificate"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/90 hover:bg-background border border-border-custom shadow-md text-foreground transition-all cursor-pointer hover:scale-105 active:scale-95 z-10"
                 >
-                  <div className="flex items-center justify-center shrink-0">
-                    {badge.assessed ? (
-                      <ShieldCheck className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
-                    ) : (
-                      <Award className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
-                    )}
-                  </div>
-                  <span className="text-xs md:text-sm font-mono leading-none">
-                    {badge.name}
-                  </span>
-                  <span className="text-[11px] text-neutral-400 dark:text-neutral-500 font-mono ml-0.5">
-                    {badge.date}
-                  </span>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextCert();
+                  }}
+                  aria-label="Next Certificate"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/90 hover:bg-background border border-border-custom shadow-md text-foreground transition-all cursor-pointer hover:scale-105 active:scale-95 z-10"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Minimal Bottom Bar: Title & Slide Dots */}
+              <div className="flex items-center justify-between w-full px-1 text-xs font-mono">
+                <button
+                  onClick={() => setSelectedCertModal(CERTIFICATES[currentCertIndex])}
+                  className="text-left font-semibold text-foreground hover:underline truncate max-w-[280px] sm:max-w-md cursor-pointer flex items-center gap-2"
+                >
+                  <span className="text-[11px] text-neutral-400">0{currentCertIndex + 1}</span>
+                  <span>{CERTIFICATES[currentCertIndex].title}</span>
+                </button>
+
+                {/* Indicator Dots */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {CERTIFICATES.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentCertIndex(idx)}
+                      aria-label={`Go to certificate ${idx + 1}`}
+                      className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentCertIndex === idx
+                          ? "w-6 bg-neutral-800 dark:bg-neutral-200"
+                          : "w-2 bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400"
+                      }`}
+                    />
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </section>
 
@@ -1441,6 +1831,323 @@ export default function Home() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+
+      {/* ==================== Certificate Full Context Modal ==================== */}
+      <AnimatePresence>
+        {selectedCertModal && (
+          <div
+            onClick={() => setSelectedCertModal(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-background border border-border-custom rounded-2xl shadow-2xl overflow-hidden"
+            >
+              {/* Header */}
+              <div className="px-5 py-3.5 border-b border-border-custom flex items-center justify-between bg-neutral-50/50 dark:bg-neutral-950/50">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5 shrink-0">
+                    <span className="bg-[#f25022] rounded-[0.5px]"></span>
+                    <span className="bg-[#7fba00] rounded-[0.5px]"></span>
+                    <span className="bg-[#00a4ef] rounded-[0.5px]"></span>
+                    <span className="bg-[#ffb900] rounded-[0.5px]"></span>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <h3 className="text-sm font-bold text-foreground truncate">
+                      {selectedCertModal.title}
+                    </h3>
+                    <span className="text-[11px] text-neutral-400 font-mono">
+                      {selectedCertModal.issuer} · {selectedCertModal.partner}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => handleCopyCode(selectedCertModal.code)}
+                    className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border-custom text-xs font-mono hover:bg-neutral-100 dark:hover:bg-neutral-800 transition cursor-pointer text-neutral-600 dark:text-neutral-400"
+                  >
+                    {copiedCertCode === selectedCertModal.code ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>Copied Code</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Code: {selectedCertModal.code}</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setSelectedCertModal(null)}
+                    aria-label="Close modal"
+                    className="p-1.5 rounded-lg border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-foreground transition cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Certificate Body (Image + Entire Context) */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-6 bg-neutral-100/40 dark:bg-neutral-950/40">
+                {/* Certificate High-Res Image */}
+                <div className="w-full rounded-xl overflow-hidden shadow-lg border border-neutral-200 dark:border-neutral-800 bg-white">
+                  <img
+                    src={selectedCertModal.image}
+                    alt={selectedCertModal.title}
+                    className="w-full h-auto block"
+                  />
+                </div>
+
+                {/* Entire Context Details */}
+                <div className="flex flex-col gap-4 p-4 sm:p-5 rounded-xl border border-border-custom bg-background">
+                  {/* Overview */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 font-semibold">
+                      Course & Certification Overview
+                    </span>
+                    <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                      {selectedCertModal.overview}
+                    </p>
+                  </div>
+
+                  {/* Verification & Metadata Matrix */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 border border-border-custom text-xs font-mono">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] uppercase text-neutral-400">Issue Date</span>
+                      <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                        {selectedCertModal.date}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] uppercase text-neutral-400">Recipient</span>
+                      <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                        Leovi Garcia
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] uppercase text-neutral-400">Certificate ID</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-neutral-900 dark:text-neutral-100">
+                          {selectedCertModal.code}
+                        </span>
+                        <button
+                          onClick={() => handleCopyCode(selectedCertModal.code)}
+                          className="p-1 rounded hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-400 hover:text-foreground transition cursor-pointer"
+                          title="Copy certificate ID"
+                        >
+                          {copiedCertCode === selectedCertModal.code ? (
+                            <Check className="w-3 h-3 text-neutral-900 dark:text-neutral-100" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Demonstrated Competencies */}
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 font-semibold">
+                      Demonstrated Competencies
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedCertModal.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-2.5 py-1 rounded-md text-xs font-mono bg-neutral-100 dark:bg-neutral-800 border border-border-custom text-neutral-700 dark:text-neutral-300"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="px-5 py-3 border-t border-border-custom bg-background flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+                  <ShieldCheck className="w-4 h-4 text-neutral-900 dark:text-neutral-100" />
+                  <span>Verified Simplilearn SkillUp Credential</span>
+                </div>
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <a
+                    href={selectedCertModal.credentialUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Verify Online</span>
+                  </a>
+                  <a
+                    href={selectedCertModal.image}
+                    download={`${selectedCertModal.id}_certificate.png`}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-neutral-900 dark:bg-neutral-100 text-neutral-100 dark:text-neutral-900 font-semibold hover:opacity-90 transition"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download PNG</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ==================== Microsoft Learn Badges Full Context Modal ==================== */}
+      <AnimatePresence>
+        {isBadgesModalOpen && (
+          <div
+            onClick={() => setIsBadgesModalOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-background border border-border-custom rounded-2xl shadow-2xl overflow-hidden"
+            >
+              {/* Header */}
+              <div className="px-5 py-4 border-b border-border-custom flex items-center justify-between bg-neutral-50/50 dark:bg-neutral-950/50">
+                <div className="flex items-center gap-2.5">
+                  <div className="grid grid-cols-2 gap-0.5 w-4 h-4 shrink-0">
+                    <span className="bg-[#f25022] rounded-[0.5px]"></span>
+                    <span className="bg-[#7fba00] rounded-[0.5px]"></span>
+                    <span className="bg-[#00a4ef] rounded-[0.5px]"></span>
+                    <span className="bg-[#ffb900] rounded-[0.5px]"></span>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-bold text-foreground">
+                        Microsoft Learn Credentials & Badges
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900">
+                        {MS_LEARN_BADGES.length} Total
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-neutral-400 font-mono">
+                      Official completions across Cloud Computing, Data Analytics & AI
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsBadgesModalOpen(false)}
+                  aria-label="Close badges modal"
+                  className="p-1.5 rounded-lg border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-foreground transition cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Filter Pills */}
+              <div className="px-5 py-3 border-b border-border-custom bg-background/50 flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
+                {(
+                  [
+                    { id: "all", label: `All (${MS_LEARN_BADGES.length})` },
+                    { id: "assessed", label: `Assessed (${MS_LEARN_BADGES.filter((b) => b.assessed).length})` },
+                    { id: "analytics", label: `Analytics & AI (${MS_LEARN_BADGES.filter((b) => b.category === "analytics").length})` },
+                    { id: "cloud", label: `Cloud (${MS_LEARN_BADGES.filter((b) => b.category === "cloud").length})` },
+                  ] as const
+                ).map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setBadgeFilter(filter.id)}
+                    className={`px-3 py-1.5 rounded-md transition cursor-pointer shrink-0 ${
+                      badgeFilter === filter.id
+                        ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 font-semibold shadow-2xs"
+                        : "text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-border-custom"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Badges List Body */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col gap-2.5">
+                {MS_LEARN_BADGES.filter((badge) => {
+                  if (badgeFilter === "assessed") return badge.assessed;
+                  if (badgeFilter === "analytics") return badge.category === "analytics";
+                  if (badgeFilter === "cloud") return badge.category === "cloud";
+                  return true;
+                }).map((badge) => (
+                  <div
+                    key={badge.name}
+                    className={`flex items-start justify-between gap-3 p-3.5 border rounded-xl bg-background transition-all duration-200 ${
+                      badge.assessed
+                        ? "border-border-custom hover:border-neutral-400 dark:hover:border-neutral-500 shadow-2xs"
+                        : "border-border-custom/70 hover:border-neutral-300 dark:hover:border-neutral-700"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex items-center justify-center shrink-0 mt-0.5">
+                        {badge.assessed ? (
+                          <div className="p-1.5 rounded-lg bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900">
+                            <ShieldCheck className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <div className="p-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-border-custom">
+                            <Award className="w-4 h-4" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-snug">
+                          {badge.name}
+                        </span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[11px] text-neutral-400 font-mono">
+                            Completed: {badge.date}
+                          </span>
+                          <span className="text-neutral-300 dark:text-neutral-700">·</span>
+                          <span className="text-[11px] font-mono uppercase text-neutral-500">
+                            {badge.category === "analytics" ? "Data Analytics & AI" : "Cloud Foundations"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0">
+                      {badge.assessed ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900">
+                          Assessed
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono text-neutral-400 bg-neutral-100 dark:bg-neutral-800 border border-border-custom">
+                          Module
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div className="px-5 py-3 border-t border-border-custom bg-neutral-50/50 dark:bg-neutral-950/50 flex items-center justify-between text-xs font-mono text-neutral-400">
+                <span>Microsoft Learn Official Learning Transcript</span>
+                <button
+                  onClick={() => setIsBadgesModalOpen(false)}
+                  className="px-3 py-1 rounded-md border border-border-custom hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
