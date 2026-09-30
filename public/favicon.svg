@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Pure solid black background -->
+  <rect width="512" height="512" fill="#000000" />
+
+  <!-- Geometric Slanted Monogram L (Exact match to reference) -->
+  <g fill="#FFFFFF">
+    <!-- Top Slanted Parallelogram -->
+    <polygon points="254,120 364,120 271,280 161,280" />
+
+    <!-- Bottom Base L-Segment with Black Notch Gap -->
+    <polygon points="271,280 416,280 351,392 96,392 129,336 238,336" />
+  </g>
+</svg>
